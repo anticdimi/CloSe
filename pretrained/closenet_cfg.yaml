@@ -1,0 +1,25 @@
+device: cuda
+model_arch:
+  garm_enc:
+    dropout: 0.0
+    emb_dim: 64
+    gar_emb_dim: 64
+    key_mask: true
+    layer_norm: add_norm
+    lr: 1.0e-05
+    max_norm: 2.0
+    n_embeddings: 18
+    n_heads: 4
+    name: attention_garm
+  pc_enc:
+    channels_sum: 192
+    emb_dim: 1024
+    inp_dim: 9
+    k: 40
+    name: dgcnn
+    use_tnet: true
+  segm_dec:
+    channels: [512, 512, 512, 512, 256]
+    dropout: 0.5
+    name: mlp
+    slope: 0.2
