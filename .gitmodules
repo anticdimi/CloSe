@@ -1,0 +1,3 @@
+[submodule "Open3D-CloSeT"]
+	path = Open3D-CloSeT
+	url = https://github.com/Bozcomlekci/Open3D-CloSeT.git

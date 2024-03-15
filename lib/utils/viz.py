@@ -1,7 +1,9 @@
 from typing import Union
+import cv2
 
 import numpy as np
 import torch
+
 from pytorch3d.renderer import (
     AlphaCompositor,
     FoVPerspectiveCameras,
@@ -28,7 +30,7 @@ def create_renderer(
     center=((0, 0, 0),),
     dist: float = 2.0,
     device: torch.device = 'cpu',
-) -> PointsRenderer | MeshRenderer:
+):
     # Initialize a camera
     # With world coordinates +Y up, +X left and +Z in
     R, T = look_at_view_transform(dist=dist, elev=elevation, azim=azimuth, up=up, at=center)
@@ -144,3 +146,99 @@ def render_p3d(
         elevation=10,
         input_type=input_type,
     )
+
+
+def render_wrapper(
+    vertices: torch.Tensor,
+    faces: torch.Tensor,
+    colors: np.ndarray,
+    device: str,
+    azimuths: list,
+    input_type: str = 'mesh',
+) -> None:
+    colors = torch.from_numpy(colors).float() if isinstance(colors, np.ndarray) else colors.float()
+    if input_type == 'mesh':
+        input_mesh = Meshes(verts=[vertices], faces=[faces], textures=TexturesVertex([colors])).to(
+            device
+        )
+    else:
+        input_mesh = Pointclouds(points=[vertices], features=[colors]).to(device)
+    return render(
+        input_data=input_mesh,
+        azimuths=azimuths,
+        image_size=2048,
+        camera_up=((0, 1, 0),),
+        dist=1.0,
+        elevation=10,
+        input_type=input_type,
+    )
+
+
+def save_views(
+    points,
+    shape_faces,
+    texture,
+    render_device,
+    azimuths,
+    input_type,
+    pred_lbl_colors,
+    gt_lbl_colors,
+    save_path,
+    rank,
+    scan_id,
+):
+    input_img = render_wrapper(
+        points,
+        shape_faces,
+        texture,
+        render_device,
+        azimuths,
+        input_type=input_type,
+    )
+    # Segmentation predictions
+    pred_img = render_wrapper(
+        points,
+        shape_faces,
+        pred_lbl_colors,
+        render_device,
+        azimuths,
+        input_type=input_type,
+    )
+    # Segmentation ground truth
+    gt_img = render_wrapper(
+        points,
+        shape_faces,
+        gt_lbl_colors,
+        render_device,
+        azimuths,
+        input_type=input_type,
+    )
+
+    gt = np.hstack([cv2.cvtColor(gt_img[i] * 255, cv2.COLOR_RGB2BGR) for i in range(len(gt_img))])
+    pred = np.hstack(
+        [cv2.cvtColor(pred_img[i] * 255, cv2.COLOR_RGB2BGR) for i in range(len(pred_img))]
+    )
+    input = np.hstack([input_img[i] * 255 for i in range(len(input_img))])
+
+    result = np.vstack([input, pred, gt])
+    cv2.imwrite(str(save_path / f'{rank:03d}_{scan_id}.png'), result)
+
+    # Save input views
+    for i, azim in enumerate(azimuths):
+        cv2.imwrite(
+            str(save_path / f'{rank:03d}_{scan_id}_{azim:03d}_input.png'), input_img[i] * 255
+        )
+
+    # Save GT views
+    for i, azim in enumerate(azimuths):
+        cv2.imwrite(
+            str(save_path / f'{rank:03d}_{scan_id}_{azim:03d}_gt.png'),
+            cv2.cvtColor(gt_img[i] * 255, cv2.COLOR_RGB2BGR),
+        )
+
+    # Save pred views
+    for i, azim in enumerate(azimuths):
+        cv2.imwrite(
+            str(save_path / f'{rank:03d}_{scan_id}_{azim:03d}_pred.png'),
+            cv2.cvtColor(pred_img[i] * 255, cv2.COLOR_RGB2BGR),
+        )

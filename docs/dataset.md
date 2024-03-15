@@ -1,20 +1,17 @@
 # CloSe-D Dataset
 
-
 The dataset is available for download [here](https://nextcloud.mpi-klsb.mpg.de/index.php/s/HSWYzTreszKqf5Y).
 
 As described in the paper, we release the following:
 
 1. ***CloSe-Di***: We provide 1455 scans, segmentation labels, and SMPL registrations.
-
 2. ***CloSe-Dc***: Due to licensing concerns, we release segmentation labels, SMPL registrations, and instructions for purchasing commercial 1732 scans. See below for more details.
-
-
 3. ***CloSe-D++***: consisting of a subset of publicly available datasets ([THuman2-0](https://github.com/ytrock/THuman2.0-Dataset), [HuMMan](https://caizhongang.com/projects/HuMMan/), [3DHumans](https://cvit.iiit.ac.in/research/projects/cvit-projects/3dhumans)), we release the segmentation labels for ~1000 scans. For scans and their SMPL registrations please refer to original work.
 
 ### Dataset details
 
 The dataset is provided in preprocessed `.npz` files. Each file represents one scan and contains the following fields:
+
 ```python
 points # (N, 3) array of scan 3D points/vertices;
 normals # (N, 3) array of scan per-point normals;
@@ -33,6 +30,7 @@ canon_pose # (N, 3) for each point in the scan, we find the closes SMPL vertex l
 ```
 
 The segmentation labels in our dataset are ordered as follows:
+
 ```python
  0: 'Hat',
  1: 'Body',
@@ -52,9 +50,12 @@ The segmentation labels in our dataset are ordered as follows:
  15: 'Scarf',
  16: 'Jumpsuits',
  17: 'Jacket'
- ```
+```
 
-## CloSe-Dc 
+#### Note
+See the [prep_scan.py](../prep_scan.py) script to see how the data is prepared for inference.
+
+## CloSe-Dc
 
 CloSe-Dc constitues of scans from commercial sources. So we cannot release the scans. Please refer to these sources to obtain the scans:
 
@@ -62,10 +63,16 @@ CloSe-Dc constitues of scans from commercial sources. So we cannot release the s
 2. ***Twindom*** : [Twindom scans](https://web.twindom.com/)
 3. ***AXYZ*** : [AXYZ scans](https://secure.axyz-design.com/en/shop/)
 
+## Experiments on the Datasets
+
+To run your training and evaluation experiments on the provided datasets or on your custom datasets, you need to keep a file which specifies the data partition you would like to use. 
+
+An example split file for CloSe-Di, that should reside in `/data/split_closedi.npz`,  is provided in [the link](https://nextcloud.mpi-klsb.mpg.de/index.php/s/HSWYzTreszKqf5Y).
 
 ## Disclaimer
 
 If you are using our dataset for your research, please cite our paper:
+
 ```bibtex
 @inproceedings{antic2024close,
     title = {CloSe: A 3D Clothing Segmentation Dataset and Model},
@@ -75,9 +82,11 @@ If you are using our dataset for your research, please cite our paper:
     year = {2024},
 }
 ```
+
 Moreover, if you are using the `CloSe-D++` subset, please also cite the original dataset papers.
 
 [THuman2-0](https://github.com/ytrock/THuman2.0-Dataset)
+
 ```bibtex
 @InProceedings{tao2021function4d,
         title={Function4D: Real-time Human Volumetric Capture from Very Sparse Consumer RGBD Sensors},
@@ -89,6 +98,7 @@ Moreover, if you are using the `CloSe-D++` subset, please also cite the original
 ```
 
  [HuMMan](https://caizhongang.com/projects/HuMMan/)
+
 ```bibtex
 @inproceedings{cai2022humman,
     title={{HuMMan}: Multi-modal 4d human dataset for versatile sensing and modeling},
@@ -104,6 +114,7 @@ Moreover, if you are using the `CloSe-D++` subset, please also cite the original
 ```
 
 [3DHumans](https://cvit.iiit.ac.in/research/projects/cvit-projects/3dhumans)
+
 ```bibtex
 @article{Jinka2022,
 		doi = {10.1007/s11263-022-01736-z},

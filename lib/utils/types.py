@@ -1,22 +1,14 @@
 from typing import Union
 
-import numpy as np
 import torch
-
-
-def to_torch(array: Union[np.ndarray, list]) -> torch.Tensor:
-    if isinstance(array, np.ndarray):
-        return torch.from_numpy(array)
-    else:
-        return torch.tensor(array)
-
+import numpy as np
 
 # ! Adapted from EasyDict: https://github.com/makinacorpus/easydict
 METHOD_KEYS = ['update', 'pop', 'to', 'to_dict', 'detach']
 
 
 class EasierDict(dict):
-    def __init__(self, d=None, **kwargs):
+    def __init__(self, d=None, **kwargs) -> None:
         if d is None:
             d = {}
         else:
@@ -40,7 +32,7 @@ class EasierDict(dict):
 
     __setitem__ = __setattr__
 
-    def update(self, e=None, **f):
+    def update(self, e=None, **f) -> None:
         d = e or dict()
         d.update(f)
         for k in d:
@@ -81,3 +73,12 @@ def to_easydict(d: dict) -> EasierDict:
         return EasierDict(d)
     else:
         raise ValueError(f'Cannot convert {type(d)} to EasyDict')
+
+
+def to_torch(ndarray) -> Union[torch.Tensor, None]:
+    if isinstance(ndarray, np.ndarray):
+        return torch.from_numpy(ndarray)
+    elif isinstance(ndarray, list):
+        return torch.Tensor(ndarray)
+    else:
+        return torch.tensor(ndarray)

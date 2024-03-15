@@ -7,6 +7,10 @@ from typing import Union
 import numpy as np
 import torch
 
+import json
+import pickle
+import time
+
 
 def save_image(image: np.ndarray, path: str) -> None:
     from PIL import Image
@@ -45,5 +49,30 @@ def labels_to_colors(
     return colors[labels]
 
 
-def get_timestamp():
+def format_time(seconds) -> str:
+    return time.strftime('%H:%M:%S', time.gmtime(seconds))
+
+
+def get_timestamp() -> str:
     return f'{datetime.now().strftime("%y%m%d-%H%M%S")}'
+
+
+def load_npz(path: Union[Path, str]) -> dict:
+    return dict(np.load(open(path, 'rb'), allow_pickle=True))
+
+
+def load_json(path: Union[Path, str], mode: str = 'r') -> dict:
+    return dict(json.load(open(path, mode)))
+
+
+def load_pkl(path: Union[Path, str], encoding: str = 'ASCII') -> object:
+    return pickle.load(open(path, 'rb'), encoding=encoding)
+
+
+def worker_init_fn(worker_id, seed=None) -> None:
+    if seed is not None:
+        np.random.seed(seed)
+    else:
+        random_data = os.urandom(4)
+        base_seed = int.from_bytes(random_data, byteorder='big')
+        np.random.seed(base_seed + worker_id)

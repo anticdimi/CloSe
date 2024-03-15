@@ -1,16 +1,35 @@
+model: closenet
 device: cuda
+debug: True
+exp_logs_path: ./closenet_train
+optim:
+  name: adam
+  lr: 5.0e-3
+  milestones: []
+  gamma: 0.1
+  weight_decay: 0.0
+data:
+  split_file: ./cfg/data_split.json
+  data_path: ./data
+  n_classes: 18
+  pointcloud_samples: 2048
+  num_workers: 0
+  batch_size: 4
+  input: 
+    - points
+    - colors
+    - normals
+    - smpl
 model_arch:
   garm_enc:
+    name: attention_garm
     dropout: 0.0
     emb_dim: 64
     gar_emb_dim: 64
     key_mask: true
-    layer_norm: add_norm
-    lr: 1.0e-05
     max_norm: 2.0
     n_embeddings: 18
     n_heads: 4
-    name: attention_garm
   pc_enc:
     channels_sum: 192
     emb_dim: 1024
@@ -32,37 +51,9 @@ model_arch:
     name: mlp
     segm_input: 1283
     slope: 0.2
-data:
-  n_classes: 18
-  pointcloud_samples: 2048
-  num_workers: 0
-  batch_size: 4
-  input: 
-    - points
-    - colors
-    - normals
-    - smpl
-  split_file: ./data/split_closedi.npz
-debug: true
-default_parameters: ./config.yaml
-device: cuda
-exp_logs_path: .
-exp_name: reproduce_best
-model: closenet_dgcnn
-optim:
-  gamma: 0.1
-  lr: 0.005
-  milestones:
-  - 880000
-  name: Adam
-  weight_decay: 0.0
 training:
+  batch_size: 16
   backup_it: -1
-  batch_size: 8
-  hooks: 
-    freeze_epoch: -1
-    unfreeze_epoch: -1
-    weights_epoch: -1
   loss_weights:
     segm_loss: 1.0
   max_epochs: 200
@@ -70,6 +61,4 @@ training:
   print_it: 200
   selection_metric: mIoU,freq_IoU
   selection_mode: maximize
-  val_it: 400
-
-
+  val_it: 200
