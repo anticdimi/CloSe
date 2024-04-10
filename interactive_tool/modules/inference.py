@@ -201,8 +201,8 @@ class InferenceWrapper:
                             outp_dict[k] = torch.cat(v, axis=1).squeeze()
                 preds = outp_dict['pred_logits']
                 val_batch_indices = val_batch['idx'].squeeze().to(torch.long)
-                changed_idx = torch.where(lookup[val_batch_indices] is True)[0]
-                fixed_idx = torch.where(lookup[val_batch_indices] is False)[0]
+                changed_idx = torch.where(lookup[val_batch_indices] == True)[0]
+                fixed_idx = torch.where(lookup[val_batch_indices] == False)[0]
                 assert len(changed_idx) + len(fixed_idx) == len(val_batch_indices)
                 if len(changed_indices) > 0:
                     loss_changed = F.cross_entropy(

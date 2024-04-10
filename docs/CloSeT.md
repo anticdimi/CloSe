@@ -13,7 +13,7 @@ Compilation and installation of the interactive tool might take a while. Refer t
 
 ## Running the Tool
 
-To work with the CloSe-T Interactive Tool, use the provided .vscode launch configuration or run:
+To work with the CloSe-T Interactive Tool, run:
 
 ```
 python interactive_tool.py  --pretrained_path ./pretrained/closenet.pth
