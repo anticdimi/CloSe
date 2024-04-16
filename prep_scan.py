@@ -152,7 +152,6 @@ def main(scan_obj, scan_tex, smpl_file, save_path, garment_class, bm_dir_path, d
         maintain_order=True,
         process=False,
     )
-    scan_mesh = trimesh.Trimesh(vertices=smpl_verts[0].detach().cpu().numpy())
     total_size = (scan_mesh.bounds[1] - scan_mesh.bounds[0]).max()
     centers = (scan_mesh.bounds[1] + scan_mesh.bounds[0]) / 2
 
@@ -175,11 +174,12 @@ def main(scan_obj, scan_tex, smpl_file, save_path, garment_class, bm_dir_path, d
         trans=smpl_trans,
         canon_pose=canon_pose_locations_smpl,
         garments=garments,
+        centers=centers,
     )
 
 
 # ! Example call:
-# * python prepare_data.py \
+# * python prep_scan.py \
 # * --scan_obj $SOME_PATH/0000.obj \        -- This file represents the scan mesh;
 # * --scan_tex $SOME_PATH/material0.jpeg \  -- This file represents UV texture map for the scan mesh;
 # * --smpl_file $SOME_PATH/0000_smpl.pkl \  -- This file represents SMPL mesh fit and is expected to contain keys: betas, body_pose, global_orient, transl, scale; 
