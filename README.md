@@ -90,7 +90,7 @@ If you find this work useful, please consider citing:
 
 ```bibtex
 @inproceedings{antic2024close,
-    title = {CloSe: A 3D Clothing Segmentation Dataset and Model},
+    title = {{CloSe}: A {3D} Clothing Segmentation Dataset and Model},
     author = {Antic, Dimitrije and Tiwari, Garvita and Ozcomlekci, Batuhan  and Marin, Riccardo  and Pons-Moll, Gerard},
     booktitle = {International Conference on 3D Vision (3DV)},
     month = {March},
