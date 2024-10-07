@@ -96,4 +96,13 @@ If you find this work useful, please consider citing:
     month = {March},
     year = {2024},
 }
+
+@inproceedings{tiwari20sizer,
+    title = {{SIZER}: A Dataset and Model for Parsing {3D} Clothing and Learning Size Sensitive {3D} Clothing},
+    author = {Tiwari, Garvita and Bhatnagar, Bharat Lal and Tung, Tony and Pons-Moll, Gerard},
+    booktitle = {European Conference on Computer Vision ({ECCV})},
+    month = {August},
+    organization = {{Springer}},
+    year = {2020},
+}
 ```
