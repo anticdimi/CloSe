@@ -50,7 +50,7 @@ def load_mesh(
     verts, faces, aux = load_obj(input_path)
     # * aux doesn't read normal info
     try:
-        trimesh_mesh = trimesh.load(input_path, process=False, maintain_order=True)
+        trimesh_mesh = trimesh.load(input_path, process=False)
         vert_normals = torch.from_numpy(trimesh_mesh.vertex_normals.astype(np.float32))
     except Exception:
         pc = Pointclouds(points=[verts]).to(device)
