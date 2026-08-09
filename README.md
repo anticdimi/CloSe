@@ -1,3 +1,5 @@
+
+
 <!-- HEADER -->
 
 <p align="center">
@@ -34,7 +36,7 @@
 
 ## Environment Setup
 
-The code was tested under `Ubuntu 22.04, Python 3.9, CUDA 11.6, Pytorch 1.13.0`
+The code was tested under `Ubuntu 22.04, Python 3.9, CUDA 11.3, PyTorch 1.11.0`
 Use the following command to create a conda environment with all the required dependencies:
 
 ```bash
